@@ -1,0 +1,62 @@
+import mysql.connector
+
+class Database:
+    def __init__(self):
+        self.host = 'localhost'
+        self.bd = 'cadastroPython'
+        self.user = 'root'
+        self.password = ''      
+        self.conn = None
+        
+    def connect(self):
+        try:
+            self.conn = mysql.connector.connect(host=self.host, database=self.bd, user=self.user, password=self.password)
+            self.cur = self.conn.cursor()
+            if self.conn.is_connected():
+                db_info = self.conn.get_server_info()
+                print("Conectado ao Banco: ", db_info)
+        except Exception as e:
+            print(e)
+        finally:
+            print("Sucesso!!")
+
+    def insert(self):
+        nome = "APARECIDO SIlVLA"
+        email = "apa@apa.apa"
+        usuario = "aparecida"
+        senha = "444444"
+
+        insert = ("INSERT INTO usuario (nome, email, usuario, senha) VALUES("+"'"+nome+"'"+","+"'"+email+"'"+","+"'"+usuario+"'"+","+"'"+senha+"'"+")")
+        self.cur.execute(insert)
+        self.conn.commit()
+
+    def select(self):
+        try:
+            self.connect()
+            cursor = self.conn.cursor()
+            cursor.execute("SELECT * FROM cadastro")
+            empresas = cursor.fetchall()
+            return empresas
+        except Exception as e:
+            print(e)
+        finally:
+            self.close_connection()
+            
+
+    def update(self):
+        print("update")
+
+    def delete(self):
+        print("delete")
+
+    def close_conection(self):
+        self.conn.close()
+        if self.conn != True:
+            print("fechou a conexão")
+
+banco = Database()
+banco.connect()
+banco.insert()
+banco.update()
+banco.delete()
+#banco.close_conection()
